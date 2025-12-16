@@ -1,0 +1,29 @@
+import { atom } from "jotai";
+import { dateRangeAtom } from "./date-range-atom";
+
+export interface WebSearchStatsEntry {
+	searchCount: number;
+	uniqueUsers: number;
+	uniqueConversations: number;
+}
+
+export interface WebSearchStatsResponse {
+	current: WebSearchStatsEntry;
+	prev: WebSearchStatsEntry;
+}
+
+export const webSearchStatsAtom = atom<Promise<WebSearchStatsResponse>>(
+	async (get) => {
+		const dateRange = get(dateRangeAtom);
+		const params = new URLSearchParams({
+			startDate: dateRange.startDate?.toISOString() ?? "",
+			endDate: dateRange.endDate?.toISOString() ?? "",
+		});
+
+		const response = await fetch(`/api/web-search-stats?${params}`);
+		if (!response.ok) {
+			throw new Error("Failed to fetch web search stats");
+		}
+		return response.json();
+	},
+);

@@ -1,0 +1,13 @@
+services:
+  next-app:
+    build:
+      context: .
+      args:
+        - MONGODB_URI=${MONGODB_URI}
+        - MONGODB_DB_NAME=${MONGODB_DB_NAME}
+    container_name: nextjs_app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env.docker
+    restart: always
