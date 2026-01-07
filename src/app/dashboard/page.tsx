@@ -13,6 +13,7 @@ import CustomDateRangePicker from "@/components/dashboard/date-range-picker";
 import ExportButton from "@/components/dashboard/export-button";
 import FilesProcessedText from "@/components/dashboard/files-processed-text";
 import InputTokenText from "@/components/dashboard/input-token-text";
+import LogoutButton from "@/components/dashboard/logout-button";
 import McpToolCallsText from "@/components/dashboard/mcp-tool-calls-text";
 import McpToolStatsTableWithChart from "@/components/dashboard/mcp-tool-stats-table-with-chart";
 import OutputTokenText from "@/components/dashboard/output-token-text";
@@ -136,6 +137,7 @@ const DashboardPage = () => {
 						<DarkLightSwitch />
 						<CustomDateRangePicker />
 						<ExportButton />
+						<LogoutButton />
 					</Box>
 					{/* Row 1: All Agents, All Users, Active Users, Requests Total, Conversations */}
 					<Box

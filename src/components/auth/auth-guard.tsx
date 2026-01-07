@@ -13,6 +13,7 @@ import {
 	Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { useRouter } from "next/navigation";
 import { type FormEvent, useCallback, useEffect, useState } from "react";
 
 interface AuthGuardProps {
@@ -47,6 +48,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
 	const { vars } = useTheme();
+	const router = useRouter();
 
 	// Check authentication status on mount
 	useEffect(() => {
@@ -83,6 +85,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
 				if (response.ok) {
 					setIsAuthenticated(true);
 					setPassword(""); // Clear password from memory
+					router.push("/dashboard");
 				} else {
 					const data = await response.json();
 					setError(data.error || "Authentication failed. Please try again.");
@@ -93,7 +96,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
 				setIsLoading(false);
 			}
 		},
-		[password],
+		[password, router],
 	);
 
 	// Loading state
@@ -216,13 +219,48 @@ export default function AuthGuard({ children }: AuthGuardProps) {
 				<Typography
 					variant="caption"
 					color="text.secondary"
-					sx={{ mt: 3, display: "block", textAlign: "center" }}
+					sx={{
+						mt: 3,
+						display: "flex",
+						flexWrap: "wrap",
+						alignItems: "center",
+						justifyContent: "center",
+						gap: "6px",
+						"& a": {
+							color: "inherit",
+							textDecoration: "none",
+							transition: "color 0.2s ease",
+							"&:hover": {
+								color: "#0071e3",
+								textDecoration: "underline",
+							},
+						},
+					}}
 				>
-					&copy; {new Date().getFullYear()}{" "}
-					<a href="https://company-gpt.com" target="_blank" rel="noopener">
+					© {new Date().getFullYear()}
+					<a
+						href="https://innfactory.ai"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						innFactory AI
+					</a>
+					<span>|</span>
+					<a
+						href="https://innfactory.de"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						innFactory
+					</a>
+					<span>|</span>
+					<a
+						href="https://company-gpt.com"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
 						CompanyGPT
-					</a>{" "}
-					LibreChat Metrics
+					</a>
 				</Typography>
 			</Paper>
 		</Box>
