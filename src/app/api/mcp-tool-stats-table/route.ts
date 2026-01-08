@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
-import { validateDateRange } from "@/lib/api/date-validation";
+import {
+	getDateParamsFromUrl,
+	validateDateRange,
+} from "@/lib/api/date-validation";
 import { getMcpToolStatsTable } from "@/lib/db/repositories";
 
 export async function GET(request: Request) {
 	try {
-		const { searchParams } = new URL(request.url);
-		const validation = validateDateRange(
-			searchParams.get("startDate"),
-			searchParams.get("endDate"),
-		);
+		const { start, end } = getDateParamsFromUrl(request);
+		const validation = validateDateRange(start, end);
 		if (!validation.success) {
 			return validation.error;
 		}

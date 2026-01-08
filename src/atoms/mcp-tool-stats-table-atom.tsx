@@ -6,8 +6,8 @@ export const mcpToolStatsTableAtom = atom<Promise<McpToolStatsTable[]>>(
 	async (get) => {
 		const dateRange = get(dateRangeAtom);
 		const params = new URLSearchParams({
-			startDate: dateRange.startDate?.toISOString() ?? "",
-			endDate: dateRange.endDate?.toISOString() ?? "",
+			start: dateRange.startDate?.toISOString() ?? "",
+			end: dateRange.endDate?.toISOString() ?? "",
 		});
 
 		const response = await fetch(`/api/mcp-tool-stats-table?${params}`);

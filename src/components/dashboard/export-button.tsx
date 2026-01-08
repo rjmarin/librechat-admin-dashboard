@@ -37,8 +37,8 @@ interface ExportData {
 }
 
 const exportToExcel = async (data: ExportData) => {
-	const XLSX = await import("xlsx");
-	const wb = XLSX.utils.book_new();
+	const ExcelJS = await import("exceljs");
+	const wb = new ExcelJS.Workbook();
 
 	// Sheet 1: Executive Summary
 	const dateRangeStr =
@@ -55,6 +55,7 @@ const exportToExcel = async (data: ExportData) => {
 		0,
 	);
 
+	const summarySheet = wb.addWorksheet("Summary");
 	const summaryData = [
 		["AI Metrics Dashboard - Executive Summary"],
 		[""],
@@ -71,90 +72,91 @@ const exportToExcel = async (data: ExportData) => {
 		["AI Agents", data.agents.length],
 		["MCP Tools Used", data.tools.length],
 	];
-	const summarySheet = XLSX.utils.aoa_to_sheet(summaryData);
-	summarySheet["!cols"] = [{ wch: 25 }, { wch: 30 }];
-	XLSX.utils.book_append_sheet(wb, summarySheet, "Summary");
+	summaryData.forEach((row) => summarySheet.addRow(row));
+	summarySheet.getColumn(1).width = 25;
+	summarySheet.getColumn(2).width = 30;
 
 	// Sheet 2: AI Models
 	if (data.models.length > 0) {
-		const modelsHeader = [
+		const modelsSheet = wb.addWorksheet("AI Models");
+		modelsSheet.addRow([
 			"Provider",
 			"Model",
 			"Total Requests",
 			"Input Tokens",
 			"Output Tokens",
 			"Total Tokens",
-		];
-		const modelsRows = data.models.map((m) => [
-			m.endpoint,
-			m.model,
-			m.requests,
-			m.totalInputToken,
-			m.totalOutputToken,
-			m.totalInputToken + m.totalOutputToken,
 		]);
-		const modelsData = [modelsHeader, ...modelsRows];
-		const modelsSheet = XLSX.utils.aoa_to_sheet(modelsData);
-		modelsSheet["!cols"] = [
-			{ wch: 15 },
-			{ wch: 25 },
-			{ wch: 15 },
-			{ wch: 15 },
-			{ wch: 15 },
-			{ wch: 15 },
-		];
-		XLSX.utils.book_append_sheet(wb, modelsSheet, "AI Models");
+		data.models.forEach((m) => {
+			modelsSheet.addRow([
+				m.endpoint,
+				m.model,
+				m.requests,
+				m.totalInputToken,
+				m.totalOutputToken,
+				m.totalInputToken + m.totalOutputToken,
+			]);
+		});
+		modelsSheet.getColumn(1).width = 15;
+		modelsSheet.getColumn(2).width = 25;
+		modelsSheet.getColumn(3).width = 15;
+		modelsSheet.getColumn(4).width = 15;
+		modelsSheet.getColumn(5).width = 15;
+		modelsSheet.getColumn(6).width = 15;
 	}
 
 	// Sheet 3: AI Agents
 	if (data.agents.length > 0) {
-		const agentsHeader = [
+		const agentsSheet = wb.addWorksheet("AI Agents");
+		agentsSheet.addRow([
 			"Agent Name",
 			"Model",
 			"Total Requests",
 			"Input Tokens",
 			"Output Tokens",
 			"Total Tokens",
-		];
-		const agentsRows = data.agents.map((a) => [
-			a.agentName,
-			a.model,
-			a.requests,
-			a.totalInputToken,
-			a.totalOutputToken,
-			a.totalInputToken + a.totalOutputToken,
 		]);
-		const agentsData = [agentsHeader, ...agentsRows];
-		const agentsSheet = XLSX.utils.aoa_to_sheet(agentsData);
-		agentsSheet["!cols"] = [
-			{ wch: 25 },
-			{ wch: 25 },
-			{ wch: 15 },
-			{ wch: 15 },
-			{ wch: 15 },
-			{ wch: 15 },
-		];
-		XLSX.utils.book_append_sheet(wb, agentsSheet, "AI Agents");
+		data.agents.forEach((a) => {
+			agentsSheet.addRow([
+				a.agentName,
+				a.model,
+				a.requests,
+				a.totalInputToken,
+				a.totalOutputToken,
+				a.totalInputToken + a.totalOutputToken,
+			]);
+		});
+		agentsSheet.getColumn(1).width = 25;
+		agentsSheet.getColumn(2).width = 25;
+		agentsSheet.getColumn(3).width = 15;
+		agentsSheet.getColumn(4).width = 15;
+		agentsSheet.getColumn(5).width = 15;
+		agentsSheet.getColumn(6).width = 15;
 	}
 
 	// Sheet 4: MCP Tools
 	if (data.tools.length > 0) {
-		const toolsHeader = ["Tool Name", "Server Name", "Call Count"];
-		const toolsRows = data.tools.map((t) => [
-			t.toolName,
-			t.serverName,
-			t.callCount,
-		]);
-		const toolsData = [toolsHeader, ...toolsRows];
-		const toolsSheet = XLSX.utils.aoa_to_sheet(toolsData);
-		toolsSheet["!cols"] = [{ wch: 30 }, { wch: 20 }, { wch: 15 }];
-		XLSX.utils.book_append_sheet(wb, toolsSheet, "MCP Tools");
+		const toolsSheet = wb.addWorksheet("MCP Tools");
+		toolsSheet.addRow(["Tool Name", "Server Name", "Call Count"]);
+		data.tools.forEach((t) => {
+			toolsSheet.addRow([t.toolName, t.serverName, t.callCount]);
+		});
+		toolsSheet.getColumn(1).width = 30;
+		toolsSheet.getColumn(2).width = 20;
+		toolsSheet.getColumn(3).width = 15;
 	}
 
-	XLSX.writeFile(
-		wb,
-		`dashboard-export-${format(new Date(), "yyyy-MM-dd")}.xlsx`,
-	);
+	// Generate and download file
+	const buffer = await wb.xlsx.writeBuffer();
+	const blob = new Blob([buffer], {
+		type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+	});
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement("a");
+	a.href = url;
+	a.download = `dashboard-export-${format(new Date(), "yyyy-MM-dd")}.xlsx`;
+	a.click();
+	URL.revokeObjectURL(url);
 };
 
 const ExportButton = () => {

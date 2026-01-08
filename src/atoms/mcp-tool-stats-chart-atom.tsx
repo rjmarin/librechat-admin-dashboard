@@ -6,8 +6,8 @@ export const mcpToolStatsChartAtom = atom<Promise<McpToolStatsChartResponse>>(
 	async (get) => {
 		const dateRange = get(dateRangeAtom);
 		const params = new URLSearchParams({
-			startDate: dateRange.startDate?.toISOString() ?? "",
-			endDate: dateRange.endDate?.toISOString() ?? "",
+			start: dateRange.startDate?.toISOString() ?? "",
+			end: dateRange.endDate?.toISOString() ?? "",
 			timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 		});
 

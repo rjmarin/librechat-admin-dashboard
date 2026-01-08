@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { validateDateRange } from "@/lib/api/date-validation";
+import {
+	getDateParamsFromUrl,
+	validateDateRange,
+} from "@/lib/api/date-validation";
 import { getMcpToolStatsChart } from "@/lib/db/repositories";
 import type { TimeGranularity } from "@/lib/db/types";
 
@@ -21,11 +24,9 @@ function getGranularity(startDate: Date, endDate: Date): TimeGranularity {
 
 export async function GET(request: Request) {
 	try {
-		const { searchParams } = new URL(request.url);
-		const validation = validateDateRange(
-			searchParams.get("startDate"),
-			searchParams.get("endDate"),
-		);
+		const url = new URL(request.url);
+		const { start, end } = getDateParamsFromUrl(request);
+		const validation = validateDateRange(start, end);
 		if (!validation.success) {
 			return validation.error;
 		}
@@ -33,7 +34,7 @@ export async function GET(request: Request) {
 		const { startDate, endDate } = validation.data;
 		const granularity = getGranularity(startDate, endDate);
 
-		const timezone = searchParams.get("timezone") || "UTC";
+		const timezone = url.searchParams.get("timezone") || "UTC";
 
 		const data = await getMcpToolStatsChart({
 			startDate,

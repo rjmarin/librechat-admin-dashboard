@@ -1,23 +1,15 @@
 import { NextResponse } from "next/server";
-import {
-	calculatePreviousPeriod,
-	validateDateRange,
-} from "@/lib/api/date-validation";
+import { validateAndCalculatePeriod } from "@/lib/api/date-validation";
 import { getWebSearchStats } from "@/lib/db/repositories";
 
 export async function GET(request: Request) {
 	try {
-		const { searchParams } = new URL(request.url);
-		const validation = validateDateRange(
-			searchParams.get("startDate"),
-			searchParams.get("endDate"),
-		);
+		const validation = validateAndCalculatePeriod(request);
 		if (!validation.success) {
 			return validation.error;
 		}
 
-		const { startDate, endDate } = validation.data;
-		const periodData = calculatePreviousPeriod(startDate, endDate);
+		const periodData = validation.data;
 
 		const data = await getWebSearchStats(periodData);
 		return NextResponse.json(data);

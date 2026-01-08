@@ -1,9 +1,13 @@
 /**
  * Date validation and calculation utilities for API routes
+ *
+ * Note: For new API routes, prefer using Zod schemas from ./schemas.ts
+ * This module is maintained for backward compatibility with existing routes.
  */
 
 import { NextResponse } from "next/server";
 import type { DateRange, PeriodComparison } from "../db/types";
+import { dateRangeSchema, parseQueryParams, toDateRange } from "./schemas";
 
 /**
  * Validation result type
@@ -110,6 +114,31 @@ export function validateAndCalculatePeriod(
 	}
 
 	const { startDate, endDate } = validation.data;
+	const periodData = calculatePreviousPeriod(startDate, endDate);
+
+	return { success: true, data: periodData };
+}
+
+/**
+ * Zod-based validation (recommended for new routes)
+ * Provides better error messages and type safety
+ */
+export function validateWithZod(
+	request: Request,
+):
+	| { success: true; data: PeriodComparison }
+	| { success: false; error: NextResponse } {
+	const result = parseQueryParams(request, dateRangeSchema);
+
+	if (!result.success) {
+		const errorMessage = result.error.issues.map((e) => e.message).join(", ");
+		return {
+			success: false,
+			error: NextResponse.json({ error: errorMessage }, { status: 400 }),
+		};
+	}
+
+	const { startDate, endDate } = toDateRange(result.data);
 	const periodData = calculatePreviousPeriod(startDate, endDate);
 
 	return { success: true, data: periodData };
