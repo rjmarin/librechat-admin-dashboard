@@ -72,7 +72,9 @@ const exportToExcel = async (data: ExportData) => {
 		["AI Agents", data.agents.length],
 		["MCP Tools Used", data.tools.length],
 	];
-	summaryData.forEach((row) => summarySheet.addRow(row));
+	summaryData.forEach((row) => {
+		summarySheet.addRow(row);
+	});
 	summarySheet.getColumn(1).width = 25;
 	summarySheet.getColumn(2).width = 30;
 

@@ -44,7 +44,7 @@ const useTableManager = <T extends object>({
 	const visibleRows = useMemo(
 		() =>
 			[...rows]
-				.sort(getComparator(order, orderBy as any))
+				.sort(getComparator(order, orderBy as keyof T))
 				.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage),
 		[rows, order, orderBy, page, rowsPerPage],
 	);
