@@ -54,7 +54,6 @@ docker run -p 3000:3000 \
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `MONGODB_URI` | Yes | MongoDB connection string |
-| `MONGODB_DB_NAME` | Yes | Database name (usually `librechat`) |
 | `DASHBOARD_PASSWORD` | Yes | Dashboard login password |
 | `SESSION_SECRET` | No | Session signing secret (auto-generated) |
 | `NEXT_PUBLIC_BASE_PATH` | No | Base path for reverse proxy (e.g., `/dashboard`) |
