@@ -17,8 +17,8 @@ export default function LogoutButton() {
 
 			if (response.ok) {
 				// Force reload to clear all state and redirect to login
-			// Next.js basePath handles the redirect automatically
-			window.location.href = "/dashboard/login";
+				// Next.js basePath handles the redirect automatically
+				window.location.href = "/dashboard/login";
 			}
 		} catch (error) {
 			console.error("Logout failed:", error);
