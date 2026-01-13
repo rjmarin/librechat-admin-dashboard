@@ -5,6 +5,7 @@ services:
       args:
         - MONGODB_URI=${MONGODB_URI}
         - MONGODB_DB_NAME=${MONGODB_DB_NAME}
+        - NEXT_PUBLIC_BASE_PATH=/dashboard
     container_name: nextjs_app
     ports:
       - "3000:3000"

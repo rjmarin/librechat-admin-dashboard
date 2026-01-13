@@ -10,7 +10,8 @@ interface AuthGuardProps {
 }
 
 // Public routes that don't require authentication
-const PUBLIC_ROUTES = ["/login"];
+// Note: These are without basePath prefix - usePathname already includes basePath
+const PUBLIC_ROUTES = ["/login", "/dashboard/login"];
 
 export default function AuthGuard({ children }: AuthGuardProps) {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -51,7 +52,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
 		if (!isAuthenticated && !isPublicRoute) {
 			// Not authenticated and trying to access protected route
 			isRedirecting.current = true;
-			router.replace("/login");
+			router.replace("/dashboard/login");
 		} else if (isAuthenticated && isPublicRoute) {
 			// Authenticated but on login page, redirect to dashboard
 			isRedirecting.current = true;

@@ -1,11 +1,11 @@
 import type { NextConfig } from "next";
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "/dashboard";
 
 const nextConfig: NextConfig = {
 	output: "standalone",
-	basePath: basePath.length > 0 ? basePath : undefined,
-	assetPrefix: basePath.length > 0 ? basePath : undefined,
+	basePath: basePath,
+	assetPrefix: basePath,
 	poweredByHeader: false,
 	reactStrictMode: true,
 	images: {
@@ -38,7 +38,7 @@ const nextConfig: NextConfig = {
 			{
 				source: "/",
 				destination: "/dashboard",
-				permanent: true,
+				permanent: false,
 			},
 		];
 	},
