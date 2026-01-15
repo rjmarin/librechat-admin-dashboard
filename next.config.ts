@@ -1,11 +1,11 @@
 import type { NextConfig } from "next";
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "/dashboard";
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 const nextConfig: NextConfig = {
 	output: "standalone",
-	basePath: basePath,
-	assetPrefix: basePath,
+	basePath: basePath.length > 0 ? basePath : undefined,
+	assetPrefix: basePath.length > 0 ? basePath : undefined,
 	poweredByHeader: false,
 	reactStrictMode: true,
 	images: {
@@ -30,15 +30,6 @@ const nextConfig: NextConfig = {
 						value: "camera=(), microphone=(), geolocation=()",
 					},
 				],
-			},
-		];
-	},
-	async redirects() {
-		return [
-			{
-				source: "/",
-				destination: "/dashboard",
-				permanent: false,
 			},
 		];
 	},

@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation";
 
 export default function RootPage() {
-	// When basePath is set to /dashboard, this page will be at /dashboard
-	// Redirect to /dashboard/dashboard for consistency, but next.config.ts
-	// already handles / -> /dashboard redirect
+	// Redirect to the dashboard page
+	// Next.js router automatically applies basePath, so "/dashboard" becomes:
+	// - "/dashboard" when no basePath is set (local dev)
+	// - "/dashboard/dashboard" when basePath="/dashboard" (Docker/production)
 	redirect("/dashboard");
 }

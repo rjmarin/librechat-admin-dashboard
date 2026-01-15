@@ -58,15 +58,52 @@ docker run -p 3000:3000 \
 | `SESSION_SECRET` | No | Session signing secret (auto-generated) |
 | `NEXT_PUBLIC_BASE_PATH` | No | Base path for reverse proxy (e.g., `/dashboard`) |
 
-## Reverse Proxy
+## Reverse Proxy / Kubernetes Ingress
 
-To deploy under a sub-path (e.g., `/dashboard`):
+The official Docker images are built with `NEXT_PUBLIC_BASE_PATH=/dashboard`, meaning the app expects to run under the `/dashboard` path.
 
-```bash
-docker build --build-arg NEXT_PUBLIC_BASE_PATH=/dashboard -t librechat-dashboard .
+### Kubernetes Ingress Example
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dashboard-ingress
+spec:
+  rules:
+  - host: your-domain.com
+    http:
+      paths:
+      - path: /dashboard
+        pathType: Prefix
+        backend:
+          service:
+            name: dashboard-service
+            port:
+              number: 3000
 ```
 
-> **Note**: `NEXT_PUBLIC_BASE_PATH` is baked into the build. Rebuild when changing.
+No `rewrite-target` annotation is needed since the app already expects requests at `/dashboard`.
+
+### Custom Base Path
+
+To use a different base path, rebuild the Docker image:
+
+```bash
+docker build --build-arg NEXT_PUBLIC_BASE_PATH=/your-path -t librechat-dashboard .
+```
+
+### Local Development
+
+For local development without a base path, simply run:
+
+```bash
+npm run dev
+```
+
+The app will be available at `http://localhost:3000` (without any path prefix).
+
+> **Note**: `NEXT_PUBLIC_BASE_PATH` is baked into the build at compile time. You must rebuild when changing this value.
 
 ## Development Commands
 

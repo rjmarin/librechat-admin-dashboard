@@ -4,14 +4,14 @@ import { Box, CircularProgress } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { API_BASE } from "@/lib/utils/api-base";
 
 interface AuthGuardProps {
 	children: React.ReactNode;
 }
 
 // Public routes that don't require authentication
-// Note: These are without basePath prefix - usePathname already includes basePath
-const PUBLIC_ROUTES = ["/login", "/dashboard/login"];
+const PUBLIC_ROUTES = ["/login"];
 
 export default function AuthGuard({ children }: AuthGuardProps) {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
@@ -32,7 +32,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
 	useEffect(() => {
 		const checkAuth = async () => {
 			try {
-				const response = await fetch("/api/auth/verify", {
+				const response = await fetch(`${API_BASE}/auth/verify`, {
 					method: "POST",
 					credentials: "include",
 				});
@@ -52,7 +52,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
 		if (!isAuthenticated && !isPublicRoute) {
 			// Not authenticated and trying to access protected route
 			isRedirecting.current = true;
-			router.replace("/dashboard/login");
+			router.replace("/login");
 		} else if (isAuthenticated && isPublicRoute) {
 			// Authenticated but on login page, redirect to dashboard
 			isRedirecting.current = true;

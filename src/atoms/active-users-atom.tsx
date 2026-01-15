@@ -1,8 +1,7 @@
 import { atom } from "jotai";
 import type { ActiveUsers } from "@/components/models/active-users";
+import { API_BASE } from "@/lib/utils/api-base";
 import { dateRangeAtom } from "./date-range-atom";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_BACKEND_BASE_URL_NODE || "/api";
 
 export const activeUsersAtom = atom(async (get) => {
 	const timeArea = get(dateRangeAtom);

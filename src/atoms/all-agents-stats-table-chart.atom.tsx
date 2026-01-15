@@ -2,9 +2,8 @@ import { atom } from "jotai";
 import { atomFamily } from "jotai/utils";
 import type { AllAgentsStatsChart } from "@/components/models/all-agents-stats-chart";
 import { timeMap } from "@/components/utils/time-map";
+import { API_BASE } from "@/lib/utils/api-base";
 import { dateRangeAtom } from "./date-range-atom";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_BACKEND_BASE_URL_NODE || "/api";
 
 export const allAgentsStatsTableChartAtom = atomFamily((agent: string) =>
 	atom(async (get) => {

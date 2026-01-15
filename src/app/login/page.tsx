@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { type FormEvent, useCallback, useState } from "react";
+import { API_BASE, getAbsolutePath } from "@/lib/utils/api-base";
 
 export default function LoginPage() {
 	const [password, setPassword] = useState("");
@@ -32,7 +33,7 @@ export default function LoginPage() {
 			setIsLoading(true);
 
 			try {
-				const response = await fetch("/api/auth/login", {
+				const response = await fetch(`${API_BASE}/auth/login`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -44,7 +45,7 @@ export default function LoginPage() {
 				if (response.ok) {
 					setPassword(""); // Clear password from memory
 					// Force a full page reload to reset AuthGuard state
-					window.location.href = "/dashboard/dashboard";
+					window.location.href = getAbsolutePath("/dashboard");
 				} else {
 					const data = await response.json();
 					setError(data.error || "Authentication failed. Please try again.");

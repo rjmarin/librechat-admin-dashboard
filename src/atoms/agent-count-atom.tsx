@@ -1,7 +1,6 @@
 import { atom } from "jotai";
 import type { AgentCount } from "@/components/models/agent-count";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_BACKEND_BASE_URL_NODE || "/api";
+import { API_BASE } from "@/lib/utils/api-base";
 
 export const agentCountAtom = atom(async () => {
 	const res = await fetch(`${API_BASE}/all-agents`);
