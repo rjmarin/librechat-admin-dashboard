@@ -57,6 +57,51 @@ export interface ConversationsResult {
 	prevConversations: number | null;
 }
 
+export interface UserBehaviorEntry {
+	userId: string;
+	userName?: string;
+	email?: string;
+	messageCount: number;
+	conversationCount: number;
+	mcpToolCallCount: number;
+	webSearchCount: number;
+	aiErrorCount?: number;
+	lastActivityAt: Date;
+}
+
+export interface UserMcpToolUsageEntry {
+	toolName: string;
+	serverName: string;
+	count: number;
+}
+
+export interface UserRecentActivityEntry {
+	messageId: string;
+	conversationId: string;
+	sender: string;
+	model: string | null;
+	endpoint: string;
+	textPreview: string;
+	createdAt: Date;
+	hasAiError: boolean;
+}
+
+export interface UserBehaviorDetail {
+	userId: string;
+	userName?: string;
+	email?: string;
+	messageCount: number;
+	conversationCount: number;
+	userMessageCount: number;
+	assistantMessageCount: number;
+	mcpToolCallCount: number;
+	webSearchCount: number;
+	aiErrorCount: number;
+	lastActivityAt: Date | null;
+	topMcpTools: UserMcpToolUsageEntry[];
+	recentActivities: UserRecentActivityEntry[];
+}
+
 export interface McpToolCallsResult {
 	currentMcpToolCalls: number | null;
 	prevMcpToolCalls: number | null;

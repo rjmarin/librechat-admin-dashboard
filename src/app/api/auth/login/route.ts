@@ -1,10 +1,9 @@
-import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHmac, timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 
 // Default password for local development, can be overridden via environment variable
 const DASHBOARD_PASSWORD = process.env.DASHBOARD_PASSWORD || "admin";
-const SESSION_SECRET =
-	process.env.SESSION_SECRET || randomBytes(32).toString("hex");
+const SESSION_SECRET = process.env.SESSION_SECRET || "";
 const SESSION_COOKIE_NAME = "dashboard_session";
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 

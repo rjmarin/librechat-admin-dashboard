@@ -3,12 +3,21 @@ services:
     build:
       context: .
       args:
-        - MONGODB_URI=${MONGODB_URI}
-        - MONGODB_DB_NAME=${MONGODB_DB_NAME}
+        - MONGODB_URI=mongodb://extend-mongodb:27017/LibreChat
+        - MONGODB_DB_NAME=LibreChat
         - NEXT_PUBLIC_BASE_PATH=/dashboard
-    container_name: nextjs_app
+    container_name: librechat-admin-dashboard
     ports:
       - "3000:3000"
-    env_file:
-      - .env.docker
+    environment:
+      - MONGODB_URI=mongodb://extend-mongodb:27017/LibreChat
+      - MONGODB_DB_NAME=LibreChat
+      - DASHBOARD_PASSWORD=${DASHBOARD_PASSWORD:-admin}
+      - SESSION_SECRET=${SESSION_SECRET:-default-session-secret-change-in-production}
+    networks:
+      - extend-librechat_default
     restart: always
+
+networks:
+  extend-librechat_default:
+    external: true

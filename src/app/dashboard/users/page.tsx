@@ -3,22 +3,19 @@
 import { Box, useColorScheme } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import ActiveUsersText from "@/components/dashboard/active-user-text";
-import AgentCountText from "@/components/dashboard/agent-count-text";
-import AllModelStatsTableChartWithChart from "@/components/dashboard/all-model-stats-table-with-chart";
-import AllModelUsagePieChart from "@/components/dashboard/all-model-usage-pie-chart";
 import ConversationsText from "@/components/dashboard/conversations-text";
 import DashboardShell from "@/components/dashboard/dashboard-shell";
-import FilesProcessedText from "@/components/dashboard/files-processed-text";
 import InputTokenText from "@/components/dashboard/input-token-text";
 import McpToolCallsText from "@/components/dashboard/mcp-tool-calls-text";
-import McpToolStatsTableWithChart from "@/components/dashboard/mcp-tool-stats-table-with-chart";
 import OutputTokenText from "@/components/dashboard/output-token-text";
+import TokensPerMessage from "@/components/dashboard/tokens-per-message";
 import TotalRequestHeatMap from "@/components/dashboard/total-request-heat-map";
 import TotalRequestsText from "@/components/dashboard/total-requests-text";
 import TotalUsersText from "@/components/dashboard/total-users-text";
+import UserBehaviorStatsTable from "@/components/dashboard/user-behavior-stats-table";
 import WebSearchStatsText from "@/components/dashboard/web-search-stats-text";
 
-const DashboardPage = () => {
+const UsersDashboardPage = () => {
 	const { mode } = useColorScheme();
 	const { vars } = useTheme();
 
@@ -63,8 +60,8 @@ const DashboardPage = () => {
 
 	return (
 		<DashboardShell
-			title="General Dashboard"
-			subtitle="Vista ejecutiva de consumo, modelos y uso de herramientas MCP."
+			title="Users Analytics"
+			subtitle="Comportamiento por usuario: actividad, conversaciones y adopcion de herramientas."
 		>
 			<Box
 				sx={{
@@ -84,32 +81,29 @@ const DashboardPage = () => {
 				}}
 			>
 				<Box sx={{ ...statCardStyle }}>
-					<AgentCountText />
-				</Box>
-				<Box sx={{ ...statCardStyle }}>
 					<TotalUsersText />
 				</Box>
 				<Box sx={{ ...statCardStyle }}>
 					<ActiveUsersText />
 				</Box>
 				<Box sx={{ ...statCardStyle }}>
+					<ConversationsText />
+				</Box>
+				<Box sx={{ ...statCardStyle }}>
 					<TotalRequestsText />
 				</Box>
 				<Box sx={{ ...statCardStyle }}>
-					<ConversationsText />
+					<McpToolCallsText />
 				</Box>
 			</Box>
 
 			<Box
 				sx={{
 					display: "grid",
-					gridTemplateColumns: "repeat(5, 1fr)",
+					gridTemplateColumns: "repeat(4, 1fr)",
 					gap: 2,
 					marginBottom: "30px",
-					"@media (max-width: 1400px)": {
-						gridTemplateColumns: "repeat(3, 1fr)",
-					},
-					"@media (max-width: 900px)": {
+					"@media (max-width: 1200px)": {
 						gridTemplateColumns: "repeat(2, 1fr)",
 					},
 					"@media (max-width: 600px)": {
@@ -124,53 +118,29 @@ const DashboardPage = () => {
 					<OutputTokenText />
 				</Box>
 				<Box sx={{ ...statCardStyle }}>
-					<McpToolCallsText />
-				</Box>
-				<Box sx={{ ...statCardStyle }}>
 					<WebSearchStatsText />
 				</Box>
 				<Box sx={{ ...statCardStyle }}>
-					<FilesProcessedText />
+					<TokensPerMessage />
 				</Box>
 			</Box>
 
 			<Box sx={{ ...panelStyle, marginTop: "40px" }}>
-				<AllModelStatsTableChartWithChart />
-			</Box>
-
-			<Box sx={{ ...panelStyle, marginTop: "40px" }}>
-				<McpToolStatsTableWithChart />
+				<UserBehaviorStatsTable />
 			</Box>
 
 			<Box
 				sx={{
 					marginTop: "35px",
-					display: "flex",
-					flexDirection: { lg: "row", xs: "column" },
-					width: "100%",
-					maxWidth: "100%",
-					height: "auto",
+					display: "grid",
+					gridTemplateColumns: "1fr",
 					gap: 3,
-					overflow: "hidden",
 				}}
 			>
 				<Box
 					padding={"20px"}
 					sx={{
 						...panelStyle,
-						flex: { xs: "1 1 auto", lg: "1 1 0" },
-						minWidth: 0,
-						height: { xs: "auto", lg: 390 },
-						overflow: "hidden",
-					}}
-				>
-					<AllModelUsagePieChart />
-				</Box>
-				<Box
-					padding={"20px"}
-					sx={{
-						...panelStyle,
-						flex: { xs: "1 1 auto", lg: "1 1 0" },
 						minWidth: 0,
 						overflow: "hidden",
 					}}
@@ -181,4 +151,5 @@ const DashboardPage = () => {
 		</DashboardShell>
 	);
 };
-export default DashboardPage;
+
+export default UsersDashboardPage;
