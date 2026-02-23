@@ -24,6 +24,7 @@ services:
     environment:
       - MONGODB_URI=mongodb://extend-mongodb:27017/LibreChat
       - MONGODB_DB_NAME=LibreChat
+      - NODE_ENV=production
     networks:
       - extend-network
     restart: always

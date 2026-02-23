@@ -45,7 +45,7 @@ export default function LoginPage() {
 				if (response.ok) {
 					setPassword(""); // Clear password from memory
 					// Force a full page reload to reset AuthGuard state
-					window.location.href = getAbsolutePath("/dashboard");
+					window.location.href = getAbsolutePath("/");
 				} else {
 					const data = await response.json();
 					setError(data.error || "Authentication failed. Please try again.");
